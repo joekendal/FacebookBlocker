@@ -37,22 +37,31 @@ GREEN='\033[0;32m'
 NC='\033[0m'
 
 if [[ "$OSTYPE" == "linux"* ]]; then
-	echo "$DOMAINS" >> /etc/hosts
-  echo -e "[${GREEN}*${NC}] Block rules written to /etc/hosts"
+
+  echo "$DOMAINS" >> /etc/hosts
+  echo "[${GREEN}*${NC}] Block rules written to /etc/hosts"
+  
   for ip in $(whois -h whois.radb.net '!gAS32934' | tail -n +2 | head -n +1)
     do iptables -A INPUT -s $ip -j DROP
   done
   echo -e "[${GREEN}*${NC}] Facebook IPs blocked in IP tables"  
+  
 elif [[ "$OSTYPE" == "darwin"* ]] || [[ "$OSTYPE" == "bsd"* ]]; then
-	echo "$DOMAINS" >> /etc/hosts
-  echo -e "[${GREEN}*${NC}] Block rules written to /etc/hosts"
-	pfctl -t blocklist -T add $(whois -h whois.radb.net '!gAS32934' | tail -n +2 | head -n +1) 2>/dev/null
-  echo -e "[${GREEN}*${NC}] Facebook IPs blocked by the packet filter device"
+
+  echo "$DOMAINS" >> /etc/hosts
+  echo "[${GREEN}*${NC}] Block rules written to /etc/hosts"
+  
+  pfctl -t blocklist -T add $(whois -h whois.radb.net '!gAS32934' | tail -n +2 | head -n +1) 2>/dev/null
+  echo "[${GREEN}*${NC}] Facebook IPs blocked by the packet filter device"
+  
 elif [[ "$OSTYPE" == "msys"* ]]; then
-	echo "$DOMAINS" >> c:\windows\system32\drivers\etc\hosts
-  echo -e "[${GREEN}*${NC}] Block rules written to c:\windows\system32\drivers\etc\hosts"
+
+  echo "$DOMAINS" >> c:\windows\system32\drivers\etc\hosts
+  echo "[${GREEN}*${NC}] Block rules written to c:\windows\system32\drivers\etc\hosts"
+  
   for ip in $(whois -h whois.radb.net '!gAS32934')
     do netsh advfirewall firewall add rule name="$ip" dir=in interface=any action=block remoteip=$ip
   done
-  echo -e "[${GREEN}*${NC}] Facebook IPs blocked by the firewall"
+  echo "[${GREEN}*${NC}] Facebook IPs blocked by the firewall"
+  
 fi
