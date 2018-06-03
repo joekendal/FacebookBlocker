@@ -2423,7 +2423,7 @@ NC='\033[0m'
 if [[ "$OSTYPE" == "linux"* ]]; then
 
   echo "$DOMAINS" >> /etc/hosts
-  echo "[${GREEN}*${NC}] Block rules written to /etc/hosts"
+  echo -e "[${GREEN}*${NC}] Block rules written to /etc/hosts"
   
   for ip in $(whois -h whois.radb.net '!gAS32934' | tail -n +2 | head -n +1)
     do iptables -A INPUT -s $ip -j DROP
